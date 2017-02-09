@@ -11,3 +11,5 @@ data-paths: ["data"]
 
 models:
   recurly:
+    vars:
+      subscriptions_table: # schema.table
