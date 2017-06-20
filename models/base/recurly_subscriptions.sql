@@ -1,44 +1,33 @@
 select
 
-  --ids
-  uuid,
-  plan__plan_code,
-  pending_subscription__plan__plan_code as pending_subscription_plan_code,
+    --ids
+    uuid as id,
+    nullif(account_href,'') as account_id,
+    nullif(invoice_href,'')::integer as invoice_id,
 
+    --dates
+    nullif(activated_at,'')::timestamp as activated_at,
+    nullif(canceled_at,'')::timestamp as canceled_at,
+    nullif(current_period_started_at,'')::timestamp as current_period_started_at,
+    nullif(current_period_ends_at,'')::timestamp as current_period_ends_at,
+    nullif(expires_at,'')::timestamp as expires_at,
+    trial_started_at::timestamp,
+    trial_ends_at::timestamp,
 
-  --dates
-  activated_at__inst,
-  activated_at__string,
-  canceled_at__inst,
-  canceled_at__string,
-
-
-
-  currency,
-  unit_amount_in_cents,
-  current_period_ends_at__inst,
-  current_period_ends_at__string,
-  current_period_started_at__inst,
-  current_period_started_at__string,
-  expires_at__inst,
-  expires_at__string,
-  invoice_href,
-  net_terms,
-  pending_subscription__quantity,
-  pending_subscription__unit_amount_in_cents,
-  quantity,
-  remaining_billing_cycles,
-  revenue_schedule_type,
-  state,
-  total_billing_cycles,
-  trial_ends_at__inst,
-  trial_ends_at__string,
-  trial_started_at__inst,
-  trial_started_at__string,
-
-
-
-  coalesce(updated_at__inst::timestamp, updated_at__string::timestamp) as updated_at
+    nullif(state,'') as state,
+    nullif(collection_method,'') as collection_method,
+    nullif(currency,'') as currency,
+    nullif(customer_notes,'') as customer_notes,
+    net_terms,
+    nullif(plan__name,'') as plan_name,
+    nullif(plan__plan_code,'') as plan_code,
+    quantity,
+    unit_amount_in_cents/100.0 as unit_amount,
+    remaining_billing_cycles,
+    total_billing_cycles,
+    nullif(revenue_schedule_type,'') as revenue_schedule_type,
+    nullif(terms_and_conditions,'') as terms_and_conditions,
+    nullif(updated_at,'')::timestamp as updated_at
 
 from
   {{var('subscriptions_table')}}
